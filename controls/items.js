@@ -2,7 +2,7 @@ const Item = require('../models/items');
 
 const allItems = async (req, res) => {
   const query = req.query.name || '';
-  const sortByName = req.query.sortByName;
+  const sortByName = req.query.sortByName || false;
   //console.log(query);
   let items = [];
   if (query) {
@@ -30,23 +30,37 @@ const singleItem = async (req, res) => {
   res.send(result);
 };
 
-const createItem = async (req, res) => {
-  const itemInfo = req.body;
-  const result = await Item.create(itemInfo);
-  res.send(result);
+const createItem = async (req, res, next) => {
+  try {
+    const itemInfo = req.body;
+    const result = await Item.create(itemInfo);
+    res.send(result);
+  } catch (err) {
+    next(err);
+  }
 };
 
-const updateItem = async (req, res) => {
-  const itemId = req.params.id;
-  const itemInfo = req.body;
-  const result = await Item.findByIdAndUpdate(itemId, itemInfo);
-  res.send(result);
+const updateItem = async (req, res, next) => {
+  try {
+    const itemId = req.params.id;
+    const itemInfo = req.body;
+    const result = await Item.findByIdAndUpdate(itemId, itemInfo, {
+      new: true,
+    });
+    res.send(result);
+  } catch (err) {
+    next(err);
+  }
 };
 
-const deleteItem = async (req, res) => {
-  const itemId = req.params.id;
-  const result = await Item.findOneAndDelete(itemId);
-  res.send(result);
+const deleteItem = async (req, res, next) => {
+  try {
+    const itemId = req.params.id;
+    const result = await Item.findByIdAndDelete(itemId);
+    res.send(result);
+  } catch (err) {
+    next(err);
+  }
 };
 
 module.exports = {

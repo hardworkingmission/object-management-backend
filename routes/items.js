@@ -9,6 +9,7 @@ const {
 } = require('../controls/items');
 
 router.route('/').get(allItems).post(createItem);
+
 router.route('/:id').get(singleItem).patch(updateItem).delete(deleteItem);
 
 module.exports = router;

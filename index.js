@@ -26,3 +26,9 @@ start();
 app.get('/', (req, res) => {
   res.send('Welcome to object management backend');
 });
+
+// error handle
+app.use((err, req, res, next) => {
+  console.log('XXXXXX');
+  res.status(500).send(err.message);
+});
